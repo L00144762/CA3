@@ -132,7 +132,7 @@ Connaucht <- total %>% select(`Belmullet Temp`, `Belmullet Rain`,
                               `Mullingar Temp`, `Mullingar Rain`,
                               `Shannon Temp`, `Shannon Rain`)
 #mean rain and temp for connaucht and leinster for each year
-# as they contain < 1 weather station
+# as they contain > 1 weather station
 # this will unfortunaetly effect granularity 
 Connaucht$Mean_Temp <- apply(Connaucht[,c("Belmullet Temp","Mullingar Temp",
                                           "Shannon Temp")], 1, mean)
