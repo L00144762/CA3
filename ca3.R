@@ -45,8 +45,8 @@ temp1 <-temp %>%
   `colnames<-`(.[1,]) %>%
   .[-1,] %>%
   `rownames<-`(NULL)
-temp <- temp1[,-1]
-rownames(temp) <- temp1[,1]
+#temp <- temp1[,-1]
+#rownames(temp) <- temp1[,1]
 
 rainfall1 <-rainfall %>%
   t() %>%
@@ -55,8 +55,8 @@ rainfall1 <-rainfall %>%
   `colnames<-`(.[1,]) %>%
   .[-1,] %>%
   `rownames<-`(NULL)
-rainfall <- rainfall1[,-1]
-rownames(rainfall) <- rainfall1[,1]
+#rainfall <- rainfall1[,-1]
+#rownames(rainfall) <- rainfall1[,1]
 
 
 
@@ -69,16 +69,16 @@ colnames(rainfall1) <-c("Belmullet Rain","Valentia Rain", "Casement Rain", "Cork
 
 # changing to numeric
 
-temp1[, 1:ncol(temp1)] <- sapply(temp1[2:ncol(temp1)],
-                                    as.numeric)
+#temp1[, 1:ncol(temp1)] <- sapply(temp1[2:ncol(temp1)],
+                                    #as.numeric)
 
 
 
-rainfall1[, 1:ncol(rainfall1)] <- sapply(rainfall1[, 2:ncol(rainfall1)],
-                               as.numeric)
+#rainfall1[, 1:ncol(rainfall1)] <- sapply(rainfall1[, 2:ncol(rainfall1)],
+                               #as.numeric)
 
-str(temp)
-str(rainfall)
+
+
 
 # merging the two datasets by the X.1 colum (yearly and monthly data)
 total1 <- merge(temp1, rainfall1, by = "X.1")
