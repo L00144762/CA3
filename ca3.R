@@ -13,7 +13,7 @@ rainfall <- read.csv('rainfall.csv',
                      sep = ",",
                      strip.white = TRUE,
                      stringsAsFactors = FALSE)
-temp <- read.csv('temp.csv',
+temp <- read.csv('.csv',
                  header = TRUE, 
                  sep = ",",
                  strip.white = TRUE,
