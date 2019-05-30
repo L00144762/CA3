@@ -1,7 +1,5 @@
 #### time series: altering the research question due to poor prediction quality of linear regression
 #
-a <- data.frame(AirPassengers)
-
 
 library(tseries)
 library(forecast)
@@ -13,13 +11,13 @@ Ulster_test <- slice(Ulster, 1:(n()-3))
 ts_Ulster_Temp <- ts(Ulster_test$`Malin Head Temp`, start = c(1990,1),
                      frequency = 12)
 ts_Ulster_Temp
-plot(ts_Ulster_Temp, main = "Raw time series")
+plot(ts_Ulster_Temp, main = "Ulster raw time series")
 par(resetPar())
 # there seems to be some seasonal effect and random fluctuations
 # but no overall trend which is good 
 y_range <- c(min(ts_Ulster_Temp), max(ts_Ulster_Temp))
 y_range
-
+par(mfrow = c(3,1))
 plot(ma(ts_Ulster_Temp, 3), main = "Simple moving avg (k=3)",
      ylim = y_range)
 plot(ma(ts_Ulster_Temp, 7), main = "Simple moving avg (k=7)",
@@ -37,9 +35,10 @@ ndiffs(ts_Ulster_Temp)
 # confirms that nothing needs to be done to the series
 # and that it is stationary i.e series does not need
 # to be differenced
+par(mfrow = c(2,1))
 Pacf(ts_Ulster_Temp, main = "partial auto correlation plot for Ulster Temp")
 Acf(ts_Ulster_Temp, main = "auto correlation plot for Ulster temp")
-
+par(resetPar())
 #there are loads of different p and q values that can be chosen,
 # best to use auto ARIMA instead of cycling through each
 # set manually
@@ -70,7 +69,7 @@ seasonplot(ts_Ulster_Temp, 12, col=rainbow(12),
            year.labels =  TRUE,
            main = "seasonal plot of ulster temp")
 ##outlier in september 2013; temperature was very low compared to every other
-# year. this indicates either the influence of an unseen variable (heatwave maybe)
+# year. this indicates either the influence of an unseen variable
 # or it is an error in the data. we'll see how it effects the series
 
 seasonplot(ulster_seasonadj, 12, col=rainbow(12),
@@ -87,7 +86,7 @@ adf.test(ulster_seasonadj)
 # 1,0,0 appears to be the best one
 aa_ulster <- auto.arima((ulster_seasonadj))
 aa_ulster
-qqnorm(aa_ulster$residuals)
+qqnorm(aa_ulster$residuals, main = "Ulster residuals normality plot")
 qqline(aa_ulster$residuals)
 
 # trying a different arima model to compare accuracy
@@ -105,12 +104,16 @@ accuracy(arima_ulster)
 # the arima model is good fit for the data
 Box.test(aa_ulster$residuals, type = "Ljung-Box")
 
-forecast(aa_ulster, 3)
+forecast_U <- forecast(aa_ulster, 3)
+forecaset_U
 # not far off the actual values. Good model
 # outlier must be accounted for 
-plot(forecast(aa_ulster, 3))
-plot(ts_Ulster_Temp)
+plot(forecast_U, main = "Ulster forecast")
 
+forecast_U <- data.frame(forecast(aa_ulster, 3))
+actiual_vs_pred_U <- data.frame(actual = Ulster$`Malin Head Temp`[349:351],
+                                predicted = forecast_U$Point.Forecast)
+actiual_vs_pred_U
 # after reading met erieann weather report for 2013 September,
 # it appears there was no obvious cause to the outlier (low temperature)
 # this is likely an error in the data, and not caused by some unseen variable
@@ -196,7 +199,7 @@ adf.test(connacht_seasonadj)
 aa_connacht <- auto.arima(connacht_seasonadj)
 aa_connacht
 
-qqnorm(aa_connacht$residuals)
+qqnorm(aa_connacht$residuals, main = "Connacht temp normality plot")
 qqline(aa_connacht$residuals)
 # the outlier has caused problems
 # need to sort it out
@@ -206,8 +209,12 @@ qqline(aa_connacht$residuals)
 accuracy(aa_connacht)
 # mape of 19%
 
-forecast(aa_connacht, 3)
-plot(forecast(aa_connacht, 3))
+forecast_C <- forecast(aa_connacht, 3)
+plot(forecast_C)
+
+forecast_C <- data.frame(forecast(aa_connacht, 3))
+actiual_vs_pred_C <- data.frame(actual = Connaucht$Mean_Temp[349:351],
+                                predicted = forecast_C$Point.Forecast)
 
 
 # the outlier for this year is explained by the met ireland website
@@ -288,7 +295,7 @@ adf.test(munster_seasonadj)
 aa_munster <- auto.arima(munster_seasonadj)
 aa_munster
 
-qqnorm(aa_munster$residuals)
+qqnorm(aa_munster$residuals, main = "Munster temp normality plot")
 qqline(aa_munster$residuals)
 # the outlier has caused problems
 # need to sort it out
@@ -298,8 +305,8 @@ qqline(aa_munster$residuals)
 accuracy(aa_munster)
 # mape of 19%
 
-forecast(aa_munster, 3)
+forecast_M <- data.frame(forecast(aa_munster, 3))
+actiual_vs_pred_M <- data.frame(actual = Munster$`Valentia Temp`[349:351],
+                      predicted = forecast_M$Point.Forecast)
 plot(forecast(aa_munster, 3))
-
-
 
