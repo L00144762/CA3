@@ -310,4 +310,4 @@ actiual_vs_pred_M <- data.frame(actual = Munster$`Valentia Temp`[349:351],
                       predicted = forecast_M$Point.Forecast)
 plot(forecast(aa_munster, 3))
 
-## this is a comment from my Gartan tech computer to check and see if git clone worked
+## this is a comment from my Gartan tech computer to check and see if git clone worked.
